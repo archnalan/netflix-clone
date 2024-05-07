@@ -1,0 +1,26 @@
+.nav{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    object-fit: contain;
+    padding: 5px 40px 10px 40px;    
+    z-index: 1;   
+
+    /* Animations */
+    
+    transition-timing-function: ease-out;
+    transition: all .5s;
+}
+.nav_black{
+    background-image: linear-gradient(to bottom, #111, #1a1a1af4 75%, transparent 100%);
+
+}
+.nav_logo{
+    height: 30px;
+}
+.nav_user{
+    height: 30px;
+    padding-right: 80px;
+}
