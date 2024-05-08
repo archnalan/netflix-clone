@@ -5,9 +5,17 @@ import movieTrailer from "movie-trailer";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
-const Row = ({ title, fetchUrl, isLargeRow }) => {
+const Row = ({
+  title,
+  fetchUrl,
+  isLargeRow,
+  trailerUrl,
+  setTrailerUrl,
+  activeRow,
+  setActiveRow,
+  clearTrailer,
+}) => {
   const [movies, setMovies] = useState([]);
-  const [trailerUrl, setTrailerUrl] = useState("");
 
   useEffect(() => {
     async function fetchData() {
@@ -34,13 +42,15 @@ const Row = ({ title, fetchUrl, isLargeRow }) => {
   };
 
   const handleClick = (movie) => {
-    if (trailerUrl) setTrailerUrl("");
+    //Toggle active Row
+    activeRow === title ? clearTrailer() : setActiveRow(title);
 
+    // fetch a new trailerUrl
     movieTrailer(movie?.title || movie?.name || movie?.original_name || "")
       .then((url) => {
         //https://www.youtube.com/watch?v=XtMThy8QKqU&t=4519s get final part
         const urlParams = new URLSearchParams(new URL(url).search);
-        setTrailerUrl(urlParams.get("v"));
+        setTimeout(() => setTrailerUrl(urlParams.get("v")), 0);
       })
       .catch((error) => {
         console.log(error);
@@ -62,7 +72,9 @@ const Row = ({ title, fetchUrl, isLargeRow }) => {
         ))}
       </div>
       <div className="trailer">
-        {trailerUrl && <Youtube videoId={trailerUrl} opts={opts} />}
+        {activeRow === title && trailerUrl && (
+          <Youtube videoId={trailerUrl} opts={opts} />
+        )}
       </div>
     </div>
   );
@@ -72,6 +84,11 @@ Row.propTypes = {
   title: PropTypes.string.isRequired,
   fetchUrl: PropTypes.string.isRequired,
   isLargeRow: PropTypes.bool,
+  trailerUrl: PropTypes.string,
+  setTrailerUrl: PropTypes.func.isRequired,
+  activeRow: PropTypes.string,
+  setActiveRow: PropTypes.func.isRequired,
+  clearTrailer: PropTypes.func,
 };
 
 export default Row;
