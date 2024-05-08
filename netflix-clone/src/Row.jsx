@@ -1,20 +1,10 @@
 import axios from "./axios.js";
 import "./Row.css";
-import Youtube from "react-youtube";
 import movieTrailer from "movie-trailer";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
-const Row = ({
-  title,
-  fetchUrl,
-  isLargeRow,
-  trailerUrl,
-  setTrailerUrl,
-  activeRow,
-  setActiveRow,
-  clearTrailer,
-}) => {
+const Row = ({ title, fetchUrl, isLargeRow, handleTrailerClick }) => {
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
@@ -33,24 +23,13 @@ const Row = ({
 
   const base_url = "https://image.tmdb.org/t/p/original";
 
-  const opts = {
-    height: "450",
-    width: "100%",
-    playerVars: {
-      autoplay: 1,
-    },
-  };
-
   const handleClick = (movie) => {
-    //Toggle active Row
-    activeRow === title ? clearTrailer() : setActiveRow(title);
-
-    // fetch a new trailerUrl
+    // fetch movie trailerUrl
     movieTrailer(movie?.title || movie?.name || movie?.original_name || "")
       .then((url) => {
         //https://www.youtube.com/watch?v=XtMThy8QKqU&t=4519s get final part
         const urlParams = new URLSearchParams(new URL(url).search);
-        setTimeout(() => setTrailerUrl(urlParams.get("v")), 0);
+        setTimeout(() => handleTrailerClick(urlParams.get("v")), 0);
       })
       .catch((error) => {
         console.log(error);
@@ -71,11 +50,6 @@ const Row = ({
           />
         ))}
       </div>
-      <div className="trailer">
-        {activeRow === title && trailerUrl && (
-          <Youtube videoId={trailerUrl} opts={opts} />
-        )}
-      </div>
     </div>
   );
 };
@@ -84,11 +58,7 @@ Row.propTypes = {
   title: PropTypes.string.isRequired,
   fetchUrl: PropTypes.string.isRequired,
   isLargeRow: PropTypes.bool,
-  trailerUrl: PropTypes.string,
-  setTrailerUrl: PropTypes.func.isRequired,
-  activeRow: PropTypes.string,
-  setActiveRow: PropTypes.func.isRequired,
-  clearTrailer: PropTypes.func,
+  handleTrailerClick: PropTypes.func.isRequired,
 };
 
 export default Row;

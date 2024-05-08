@@ -4,14 +4,20 @@ import requests from "./requests.js";
 import "./App.css";
 import Nav from "./Nav.jsx";
 import { useState } from "react";
+import PopUp from "./PopUp.jsx";
 
 function App() {
   const [trailerUrl, setTrailerUrl] = useState("");
-  const [activeRow, setActiveRow] = useState(null);
+  const [popUpVisible, setPopUpVisible] = useState(false);
 
-  const clearTrailer = () => {
-    setActiveRow(null);
-    setTrailerUrl("");
+  const handleTrailerClick = (url) => {
+    setTrailerUrl(url);
+    setPopUpVisible(true);
+  };
+
+  const handleClose = () => {
+    setPopUpVisible(false);
+    setTimeout(setTrailerUrl(""), 0);
   };
   return (
     <>
@@ -24,75 +30,46 @@ function App() {
             title="NETFLIX ORIGINALS"
             fetchUrl={requests.fetchNetflixOriginals}
             isLargeRow={true}
-            trailerUrl={trailerUrl}
-            setTrailerUrl={setTrailerUrl}
-            activeRow={activeRow}
-            setActiveRow={setActiveRow}
-            clearTrailer={clearTrailer}
+            handleTrailerClick={handleTrailerClick}
           />
           <Row
             title="Trending Now"
             fetchUrl={requests.fetchTrending}
-            trailerUrl={trailerUrl}
-            setTrailerUrl={setTrailerUrl}
-            activeRow={activeRow}
-            setActiveRow={setActiveRow}
-            clearTrailer={clearTrailer}
+            handleTrailerClick={handleTrailerClick}
           />
           <Row
             title="Top Rated Movies"
             fetchUrl={requests.fetchTopRated}
-            trailerUrl={trailerUrl}
-            setTrailerUrl={setTrailerUrl}
-            activeRow={activeRow}
-            setActiveRow={setActiveRow}
-            clearTrailer={clearTrailer}
+            handleTrailerClick={handleTrailerClick}
           />
           <Row
             title="Action Movies"
             fetchUrl={requests.fetchActionMovies}
-            trailerUrl={trailerUrl}
-            setTrailerUrl={setTrailerUrl}
-            activeRow={activeRow}
-            setActiveRow={setActiveRow}
-            clearTrailer={clearTrailer}
+            handleTrailerClick={handleTrailerClick}
           />
           <Row
             title="Comedy Movies"
             fetchUrl={requests.fetchComedyMovies}
-            trailerUrl={trailerUrl}
-            setTrailerUrl={setTrailerUrl}
-            activeRow={activeRow}
-            setActiveRow={setActiveRow}
-            clearTrailer={clearTrailer}
+            handleTrailerClick={handleTrailerClick}
           />
           <Row
             title="Romance Movies"
             fetchUrl={requests.fetchRomanceMovies}
-            trailerUrl={trailerUrl}
-            setTrailerUrl={setTrailerUrl}
-            activeRow={activeRow}
-            setActiveRow={setActiveRow}
-            clearTrailer={clearTrailer}
+            handleTrailerClick={handleTrailerClick}
           />
           <Row
             title="Horror Movies"
             fetchUrl={requests.fetchHorrorMovies}
-            trailerUrl={trailerUrl}
-            setTrailerUrl={setTrailerUrl}
-            activeRow={activeRow}
-            setActiveRow={setActiveRow}
-            clearTrailer={clearTrailer}
+            handleTrailerClick={handleTrailerClick}
           />
           <Row
             title="Documentaries"
             fetchUrl={requests.fetchDocumentaries}
-            trailerUrl={trailerUrl}
-            setTrailerUrl={setTrailerUrl}
-            activeRow={activeRow}
-            setActiveRow={setActiveRow}
-            clearTrailer={clearTrailer}
+            handleTrailerClick={handleTrailerClick}
           />
+          {popUpVisible && (
+            <PopUp trailerUrl={trailerUrl} handleClose={handleClose} />
+          )}
         </div>
       </div>
     </>
